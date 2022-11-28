@@ -1,2 +1,2 @@
 #!/bin/bash
-timeout 5s ./build/tsp < input.txt >> output.txt
+timeout 1s ./build/tsp < input.txt >> output.txt

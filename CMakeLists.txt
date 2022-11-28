@@ -21,6 +21,10 @@ set(    MAIN_SOURCE
         ${GENERAL_SOURCE}
         )
 
+set (   GRAPH_GENERATOR_SOURCE
+        generator/graph_generator.cpp
+        ${GENERAL_SOURCE})
+
 #--- TESTS
 set(EXTERNAL_INSTALL_LOCATION ${Testing_SOURCE_DIR}/3rdparty)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -33,6 +37,11 @@ set(TEST_SOURCES
 add_executable(test ${TEST_SOURCES})
 
 target_link_libraries(test gtest_main gtest Threads::Threads)
+#---
+
+
+#--- GENERATOR
+add_executable(generator ${GRAPH_GENERATOR_SOURCE})
 #---
 
 add_executable(tsp ${MAIN_SOURCE})
