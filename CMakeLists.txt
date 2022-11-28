@@ -32,7 +32,7 @@ find_package(Threads REQUIRED)
 
 set(TEST_SOURCES
         tests/solver.cpp
-        ${GENERAL_SOURCE} tests/solver.h)
+        ${GENERAL_SOURCE})
 
 add_executable(test ${TEST_SOURCES})
 

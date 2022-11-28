@@ -13,10 +13,9 @@ vector<vertex> ApproximateOriginalSolver::Solve(const vector<vector<vertex>> &gr
     C.reserve(K_);
 
     while (FindCAndUpdateA(C)) {
-
-        A_version_ = 1;
+        A_correct_version_ = A_main_version_;
         A_backup_ ^= DeleteRepetitions(C);
-        A_version_ = 0;
+        A_correct_version_ = A_backup_version_;
         C.clear();
     }
 
@@ -24,8 +23,8 @@ vector<vertex> ApproximateOriginalSolver::Solve(const vector<vector<vertex>> &gr
 }
 
 vector<vertex> ApproximateOriginalSolver::GetBestResult() {
-    if (A_version_ == 0) {
-        return CalculateCycle(A_);
+    if (A_correct_version_ == A_backup_version_) {
+        return CalculateCycle(A_backup_);
     }
-    return CalculateCycle(A_backup_);
+    return CalculateCycle(A_);
 }

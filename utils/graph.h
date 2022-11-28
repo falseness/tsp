@@ -50,7 +50,7 @@ struct UsingEdgesGraph {
     vector<set<vertex>> graph;
 private:
     [[nodiscard]] inline bool vertex_correct(const vertex v) const {
-        return v >= 0 && v <= graph.size();
+        return v >= 0 && v < graph.size();
     }
 public:
     void operator^=(const Edge& e);
@@ -64,7 +64,7 @@ class VertexUsed {
 public:
     explicit VertexUsed(size_t vertices_count) : vertices_(vertices_count, 0) {}
     [[nodiscard]] inline bool is_used(vertex v) const {
-        assert(0 <= v && v <= vertices_.size());
+        assert(0 <= v && v < vertices_.size());
         return vertices_[v] == used_value_;
     }
     inline void set_used(vertex v) {

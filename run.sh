@@ -1,2 +1,2 @@
 #!/bin/bash
-timeout 1s ./build/tsp < input.txt >> output.txt
+echo "$(timeout 1s ./build/tsp < input.txt)"

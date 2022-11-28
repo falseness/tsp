@@ -72,7 +72,7 @@ void UsingEdgesGraph::operator^=(const vector<Edge>& edges) {
 }
 
 
-size_t CalculateCycleCost(const std::vector<vertex>& cycle, const std::vector<vector<bool>>& graph) {
+[[nodiscard]] size_t CalculateCycleCost(const std::vector<vertex>& cycle, const std::vector<vector<bool>>& graph) {
     size_t result = 0;
     for (size_t i = 0; i < cycle.size(); ++i) {
         vertex start = cycle[i];

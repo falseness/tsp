@@ -14,7 +14,6 @@ vector<vertex> OriginalSolver::Solve(const vector<vector<vertex>> &graph,
         C.clear();
 
         size_t cost = CalculateCycleCost(CalculateCycle(A_), adjacency_matrix);
-        //std::cout << ++i << ' ' << cost << std::endl;
         if (cost * 7 <= graph.size() * 8) {
             break;
         }

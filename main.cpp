@@ -10,36 +10,43 @@
 #include "utils/input_output.h"
 
 
-std::unique_ptr<ApproximateSolver> solver;
+ApproximateSolver* solver = nullptr;
 std::vector<vector<bool>> adjacency_matrix;
 
 
 void signal_handler(int) {
     if (!solver || adjacency_matrix.empty()) {
-        std::abort();
+        std::cout << "input is too long" << std::endl;
+        //std::abort();
+        exit(0);
     }
     auto result = solver->GetBestResult();
     if (result.size() != adjacency_matrix.size()) {
-        assert(result.size() < adjacency_matrix.size());
+        if (result.size() > adjacency_matrix.size()) {
+            std::cout << "something went wrong"<< std::endl;
+        }
+        //assert(result.size() < adjacency_matrix.size());
         // solver не успел ничего посчитать
         OutputResult(adjacency_matrix.size() * 2);
     }
-    OutputResult(CalculateCycleCost(result, adjacency_matrix));
+    else {
+        OutputResult(CalculateCycleCost(result, adjacency_matrix));
+    }
     exit(0);
 }
 
 
 int main() {
     std::signal(SIGTERM, signal_handler);
-    solver = std::make_unique<ApproximateOriginalSolver>(10);
+    ApproximateOriginalSolver original_solver(2);
+    solver = &original_solver;
 
     auto graph = InputGraph();
 
     adjacency_matrix = ToAdjacencyMatrix(graph);
 
-    solver->Solve(graph, adjacency_matrix);
+    original_solver.Solve(graph, adjacency_matrix);
 
     raise(SIGTERM);
-
     return 0;
 }
