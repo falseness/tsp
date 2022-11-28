@@ -2,3 +2,5 @@
 build
 cmake-build-debug-system
 cmake-build-debug
+input.txt
+output.txt

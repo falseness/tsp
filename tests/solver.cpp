@@ -19,9 +19,8 @@ void OriginalSolverTests::TearDown() {}
 TEST_F(OriginalSolverTests, UnitTest1) {
     auto graph = FromEdgesList({{0, 1}, {1, 2}, {2, 0}});
     auto adjacency_matrix = ToAdjacencyMatrix(graph);
-    auto [cost, result] = OriginalSolver(5).Solve(graph, adjacency_matrix);
+    auto result = OriginalSolver(5).Solve(graph, adjacency_matrix);
 
-    EXPECT_THAT(cost, AllOf(Ge(3), Le(6)));
     EXPECT_EQ(result.size(), 3);
     EXPECT_EQ(set(result.begin(), result.end()), set<vertex>({0, 1, 2}));
 }
@@ -45,9 +44,7 @@ bool is_cycle(const vector<vertex> cycle) {
 
 
 void TestGraph(TSPSolver& solver, const vector<vector<vertex>>& graph, const vector<vector<bool>>& adjacency_matrix) {
-    auto [cost, result] = solver.Solve(graph, adjacency_matrix);
-
-    EXPECT_THAT(cost, AllOf(Ge(graph.size()), Le(graph.size() * 2)));
+    auto result = solver.Solve(graph, adjacency_matrix);
 
     EXPECT_EQ(graph.size(), result.size());
     EXPECT_TRUE(is_cycle(result));

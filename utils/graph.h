@@ -18,17 +18,31 @@ struct Edge {
     vertex vertexOne;
     vertex vertexTwo;
     Edge(vertex vertexOne, vertex vertexTwo);
+    [[nodiscard]] inline vertex get_min_vertex() const {
+        return std::min(vertexOne, vertexTwo);
+    }
+    [[nodiscard]] inline vertex get_max_vertex() const {
+        return std::max(vertexOne, vertexTwo);
+    }
 };
 
 
+// сравнение ребер, будто они ориентированы
 inline bool operator<(const Edge& first, const Edge& second) {
-    return first.vertexOne < second.vertexOne ||
-            (first.vertexOne == second.vertexOne && first.vertexTwo < second.vertexTwo);
+    return first.vertexOne < second.vertexOne || (first.vertexOne == second.vertexOne &&
+        first.vertexTwo < second.vertexTwo);
 }
 
 inline bool operator==(const Edge& first, const Edge& second) {
-    return (first.vertexOne == second.vertexOne && first.vertexTwo == second.vertexTwo) ||
-            (first.vertexOne == second.vertexTwo && first.vertexTwo == second.vertexOne);
+    return first.vertexOne == second.vertexOne && first.vertexTwo == second.vertexTwo;
+}
+
+inline bool operator>(const Edge& first, const Edge& second) {
+    return second < first;
+}
+
+inline bool operator!=(const Edge& first, const Edge& second) {
+    return !(first == second);
 }
 
 
@@ -40,6 +54,7 @@ private:
     }
 public:
     void operator^=(const Edge& e);
+    void operator^=(const vector<Edge>& edges);
 };
 
 

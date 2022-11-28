@@ -1,9 +1,9 @@
-//
-// Created by nikita on 27.11.22.
-//
 #include "original_solver.h"
 
-pair<size_t, vector<vertex>> OriginalSolver::Solve(const vector<vector<vertex>> &graph,
+#include "utils/delete_repeats.h"
+
+
+vector<vertex> OriginalSolver::Solve(const vector<vector<vertex>> &graph,
                                                    const vector<vector<bool>> &adjacency_matrix) {
     Initialize(graph);
 
@@ -13,14 +13,13 @@ pair<size_t, vector<vertex>> OriginalSolver::Solve(const vector<vector<vertex>> 
     while (FindCAndUpdateA(C)) {
         C.clear();
 
-        size_t cost = CalculateCycleCost(CalculateCycleByA(), adjacency_matrix);
+        size_t cost = CalculateCycleCost(CalculateCycle(A_), adjacency_matrix);
         //std::cout << ++i << ' ' << cost << std::endl;
         if (cost * 7 <= graph.size() * 8) {
             break;
         }
     }
-    auto cycle = CalculateCycleByA();
-    auto result = std::make_pair(CalculateCycleCost(cycle, adjacency_matrix), cycle);
+    auto result = CalculateCycle(A_);
     A_.graph.clear();
     vertex_used_.clear();
     return result;
@@ -34,28 +33,28 @@ void OriginalSolver::Initialize(const vector<vector<vertex>> &graph)  {
     m_A_ = 0;
 }
 
-vector<vertex> OriginalSolver::CalculateCycleByA() {
+vector<vertex> OriginalSolver::CalculateCycle(const UsingEdgesGraph& A) {
     vector<vertex> result;
     vertex_used_.next_epoch();
-    for (vertex i = 0; i < A_.graph.size(); ++i) {
-        if (!vertex_used_.is_used(i) && A_.graph[i].size() == 1) {
-            DFS(i, result);
+    for (vertex i = 0; i < A.graph.size(); ++i) {
+        if (!vertex_used_.is_used(i) && A.graph[i].size() == 1) {
+            DFS(A, i, result);
         }
     }
-    for (vertex i = 0; i < A_.graph.size(); ++i) {
+    for (vertex i = 0; i < A.graph.size(); ++i) {
         if (!vertex_used_.is_used(i)) {
-            DFS(i, result);
+            DFS(A, i, result);
         }
     }
     return result;
 }
 
-void OriginalSolver::DFS(vertex v, vector<vertex> &result) {
+void OriginalSolver::DFS(const UsingEdgesGraph& A, vertex v, vector<vertex> &result) {
     vertex_used_.set_used(v);
     result.push_back(v);
-    for (auto u : A_.graph[v]) {
+    for (auto u : A.graph[v]) {
         if (!vertex_used_.is_used(u)) {
-            DFS(u, result);
+            DFS(A, u, result);
         }
     }
 }
@@ -80,11 +79,9 @@ bool OriginalSolver::FindCAndUpdateA(vector<Edge> &C) {
 }
 
 bool OriginalSolver::TryUpdateA(const vector<Edge>& C_with_repeats) {
-    vector<Edge> C = C_with_repeats;
-    sort(C.begin(), C.end());
-    C.erase(std::unique(C.begin(), C.end()), C.end());
+    vector<Edge> C = DeleteRepetitions<Edge>(C_with_repeats);
 
-    ApplyCToA(C);
+    A_ ^= C;
 
     auto [k_A, m_A] = CalculateKAAndMA(A_, vertex_used_);
     if (k_A <  k_A_ || k_A == k_A_ && m_A > m_A_) {
@@ -92,12 +89,6 @@ bool OriginalSolver::TryUpdateA(const vector<Edge>& C_with_repeats) {
         m_A_ = m_A;
         return true;
     }
-    ApplyCToA(C);
+    A_ ^= C;
     return false;
-}
-
-void OriginalSolver::ApplyCToA(const vector<Edge> &C)  {
-    for (auto e : C) {
-        A_ ^= e;
-    }
 }

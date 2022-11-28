@@ -1,42 +1,45 @@
+#include <csignal>
+
 #include <iostream>
 
-#include "solvers/original_solver.h"
+#include <memory>
+
+#include "solvers/approximate_original_solver.h"
 #include "utils/random.h"
 #include "utils/graph.h"
+#include "utils/input_output.h"
+
+
+std::unique_ptr<ApproximateSolver> solver;
+std::vector<vector<bool>> adjacency_matrix;
+
+
+void signal_handler(int) {
+    if (!solver || adjacency_matrix.empty()) {
+        std::abort();
+    }
+    auto result = solver->GetBestResult();
+    if (result.size() != adjacency_matrix.size()) {
+        assert(result.size() < adjacency_matrix.size());
+        // solver не успел ничего посчитать
+        OutputResult(adjacency_matrix.size() * 2);
+    }
+    OutputResult(CalculateCycleCost(result, adjacency_matrix));
+    exit(0);
+}
 
 
 int main() {
+    std::signal(SIGTERM, signal_handler);
+    solver = std::make_unique<ApproximateOriginalSolver>(10);
 
-    srand(0);
-    OriginalSolver solver(5);
-    /*auto result = solver.Solve({{1}, {2}, {3}, {0}});
-    for (auto u : result) {
-        std::cout << u << ' ';
-    }*/
-    for (int cycle = 0; cycle < 1000; ++cycle) {
-        auto adjacency_matrix = GenerateGraphWithHamiltonianCycle(100, 0.999);
-        auto graph = FromAdjacencyMatrix(adjacency_matrix);
-        std::cout << "graph size " << graph.size() << std::endl;
-        auto result = solver.Solve(graph, adjacency_matrix);
-        size_t cost = CalculateCycleCost(result.second, adjacency_matrix);
-        if (cost * 7 > graph.size() * 8) {
-            std::cout << "NEOK\n";
-            for (size_t i = 0; i < graph.size(); ++i) {
-                std::cout << i << ": ";
-                for (auto u : graph[i]) {
-                    std::cout << u << ' ';
-                }
-                std::cout << '\n';
-            }
-            std::cout << "output:";
-            std::cout << result.first << " real cost:" << cost << '\n';
-            for (auto u : result.second) {
-                std::cout << u << ' ';
-            }
-            break;
-        }
-        std::cout << "test " << cycle << " length " << graph.size() << " ok" << std::endl;
-    }
+    auto graph = InputGraph();
+
+    adjacency_matrix = ToAdjacencyMatrix(graph);
+
+    solver->Solve(graph, adjacency_matrix);
+
+    raise(SIGTERM);
 
     return 0;
 }

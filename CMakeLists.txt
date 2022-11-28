@@ -13,7 +13,8 @@ set(    GENERAL_SOURCE
         utils/graph.cpp
         utils/random.cpp
         solvers/original_solver.cpp
-        solvers/graph_characteristics_calculator.cpp)
+        solvers/graph_characteristics_calculator.cpp
+        solvers/approximate_original_solver.cpp utils/input_output.cpp)
 
 set(    MAIN_SOURCE
         main.cpp
