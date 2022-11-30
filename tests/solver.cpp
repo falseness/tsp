@@ -18,8 +18,8 @@ void OriginalSolverTests::TearDown() {}
 
 TEST_F(OriginalSolverTests, UnitTest1) {
     auto graph = FromEdgesList({{0, 1}, {1, 2}, {2, 0}});
-    auto adjacency_matrix = ToAdjacencyMatrix(graph);
-    auto result = OriginalSolver(5).Solve(graph, adjacency_matrix);
+
+    auto result = OriginalSolver(5).Solve(graph);
 
     EXPECT_EQ(result.size(), 3);
     EXPECT_EQ(set(result.begin(), result.end()), set<vertex>({0, 1, 2}));
@@ -43,8 +43,8 @@ bool is_cycle(const vector<vertex> cycle) {
 }
 
 
-void TestGraph(TSPSolver& solver, const vector<vector<vertex>>& graph, const vector<vector<bool>>& adjacency_matrix) {
-    auto result = solver.Solve(graph, adjacency_matrix);
+void TestGraph(TSPSolver& solver, const vector<vector<vertex>>& graph) {
+    auto result = solver.Solve(graph);
 
     EXPECT_EQ(graph.size(), result.size());
     EXPECT_TRUE(is_cycle(result));
@@ -57,7 +57,7 @@ TEST_F(OriginalSolverTests, SmallGraph) {
         auto adjacency_matrix = GenerateRandomGraph(GenerateRandInt(1, 9), 0.5);
         auto graph = FromAdjacencyMatrix(adjacency_matrix);
 
-        TestGraph(solver, graph, adjacency_matrix);
+        TestGraph(solver, graph);
     }
 }
 
@@ -70,6 +70,6 @@ TEST_F(OriginalSolverTests, HamiltonianCycleGraphs) {
         auto adjacency_matrix = GenerateGraphWithHamiltonianCycle(GenerateRandInt(10, 1000), 0.9);
         auto graph = FromAdjacencyMatrix(adjacency_matrix);
 
-        TestGraph(solver, graph, adjacency_matrix);
+        TestGraph(solver, graph);
     }
 }

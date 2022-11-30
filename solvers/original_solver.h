@@ -24,6 +24,7 @@ protected:
 
     bool TryUpdateA(const vector<Edge>& C_with_repeats);
 
+    bool FindCAndUpdateA(vector<Edge>& C, size_t K);
     bool FindCAndUpdateA(vector<Edge>& C);
     void DFS(const UsingEdgesGraph& A, vertex v, vector<vertex>& result);
     vector<vertex> CalculateCycle(const UsingEdgesGraph& A);
@@ -31,6 +32,5 @@ protected:
 public:
     explicit OriginalSolver(size_t k) : K_(k) {};
 
-    vector<vertex> Solve(const vector<vector<vertex>>& graph,
-                                       const vector<vector<bool>>& adjacency_matrix) override;
+    vector<vertex> Solve(const vector<vector<vertex>>& graph) override;
 };

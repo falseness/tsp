@@ -15,26 +15,26 @@ typedef int vertex;
 
 
 struct Edge {
-    vertex vertexOne;
-    vertex vertexTwo;
+    vertex vertex_one;
+    vertex vertex_two;
     Edge(vertex vertexOne, vertex vertexTwo);
     [[nodiscard]] inline vertex get_min_vertex() const {
-        return std::min(vertexOne, vertexTwo);
+        return std::min(vertex_one, vertex_two);
     }
     [[nodiscard]] inline vertex get_max_vertex() const {
-        return std::max(vertexOne, vertexTwo);
+        return std::max(vertex_one, vertex_two);
     }
 };
 
 
 // сравнение ребер, будто они ориентированы
 inline bool operator<(const Edge& first, const Edge& second) {
-    return first.vertexOne < second.vertexOne || (first.vertexOne == second.vertexOne &&
-        first.vertexTwo < second.vertexTwo);
+    return first.vertex_one < second.vertex_one || (first.vertex_one == second.vertex_one &&
+                                                    first.vertex_two < second.vertex_two);
 }
 
 inline bool operator==(const Edge& first, const Edge& second) {
-    return first.vertexOne == second.vertexOne && first.vertexTwo == second.vertexTwo;
+    return first.vertex_one == second.vertex_one && first.vertex_two == second.vertex_two;
 }
 
 inline bool operator>(const Edge& first, const Edge& second) {

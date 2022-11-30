@@ -1,14 +1,13 @@
 #include "original_solver.h"
 
-#include "utils/delete_repeats.h"
 
-
-vector<vertex> OriginalSolver::Solve(const vector<vector<vertex>> &graph,
-                                                   const vector<vector<bool>> &adjacency_matrix) {
+vector<vertex> OriginalSolver::Solve(const vector<vector<vertex>> &graph) {
     Initialize(graph);
 
     vector<Edge> C;
     C.reserve(K_);
+
+    auto adjacency_matrix = ToAdjacencyMatrix(graph);
 
     while (FindCAndUpdateA(C)) {
         C.clear();
@@ -58,28 +57,58 @@ void OriginalSolver::DFS(const UsingEdgesGraph& A, vertex v, vector<vertex> &res
     }
 }
 
-bool OriginalSolver::FindCAndUpdateA(vector<Edge> &C) {
-    if (C.size() == K_) {
-        return TryUpdateA(C);
-    }
-    for (vertex i = 0; i < graph_->size(); ++i) {
-        for (auto u : (*graph_)[i]) {
-            if (i >= u) {
-                continue;
-            }
-            C.emplace_back(i, u);
-            if (FindCAndUpdateA(C)) {
-                return true;
-            }
-            C.pop_back();
+bool OriginalSolver::FindCAndUpdateA(vector<Edge>& C) {
+    for (size_t K = 1; K <= K_; ++K) {
+        if (FindCAndUpdateA(C, K)) {
+            return true;
         }
     }
     return false;
 }
 
-bool OriginalSolver::TryUpdateA(const vector<Edge>& C_with_repeats) {
-    vector<Edge> C = DeleteRepetitions<Edge>(C_with_repeats);
 
+bool OriginalSolver::FindCAndUpdateA(vector<Edge> &C, size_t K) {
+    // инициализирует рекурсивно C, чтобы ребра шли по возрастанию (чтобы гарантировать не повторяемость)
+    // причем внутри ребра vertex_one < vertex_two
+
+    if (C.size() == K) {
+        return TryUpdateA(C);
+    }
+
+    vertex previous_v_one = 0;
+    vertex previous_v_two = 0;
+    if (!C.empty()) {
+        previous_v_one = C.back().vertex_one;
+        previous_v_two = C.back().vertex_two;
+    }
+    // случай, когда первая вершина следующего ребра больше первой вершины предыдущего ребра
+    for (vertex i = previous_v_one + 1; i < graph_->size(); ++i) {
+        for (auto u : (*graph_)[i]) {
+            if (i >= u) {
+                continue;
+            }
+            C.emplace_back(i, u);
+            if (FindCAndUpdateA(C, K)) {
+                return true;
+            }
+            C.pop_back();
+        }
+    }
+    // первая вершина равна вершине следующего ребра
+    for (auto u : (*graph_)[previous_v_one]) {
+        if (u <= previous_v_two) {
+            continue;
+        }
+        C.emplace_back(previous_v_one, previous_v_two);
+        if (FindCAndUpdateA(C, K)) {
+            return true;
+        }
+        C.pop_back();
+    }
+    return false;
+}
+
+bool OriginalSolver::TryUpdateA(const vector<Edge>& C) {
     A_ ^= C;
 
     auto [k_A, m_A] = CalculateKAAndMA(A_, vertex_used_);

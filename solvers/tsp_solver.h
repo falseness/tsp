@@ -8,8 +8,7 @@
 
 class TSPSolver {
 public:
-    virtual vector<vertex> Solve(const vector<vector<vertex>>& graph,
-                                               const vector<vector<bool>>& adjacency_matrix) = 0;
+    virtual vector<vertex> Solve(const vector<vector<vertex>>& graph) = 0;
     virtual ~TSPSolver() = default;
 };
 

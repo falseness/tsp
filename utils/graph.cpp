@@ -22,14 +22,14 @@ vector<vector<vertex>> FromAdjacencyMatrix(const vector<vector<bool>>& graph) {
 vector<vector<vertex>> FromEdgesList(const vector<Edge>& edges_list) {
     int size = 0;
     for (auto u : edges_list) {
-        assert (u.vertexOne >= 0 && u.vertexTwo >= 0);
-        size = max(size, u.vertexOne);
-        size = max(size, u.vertexTwo);
+        assert (u.vertex_one >= 0 && u.vertex_two >= 0);
+        size = max(size, u.vertex_one);
+        size = max(size, u.vertex_two);
     }
     vector<vector<vertex>> result(size + 1);
     for (auto u : edges_list) {
-        result[u.vertexOne].push_back(u.vertexTwo);
-        result[u.vertexTwo].push_back(u.vertexOne);
+        result[u.vertex_one].push_back(u.vertex_two);
+        result[u.vertex_two].push_back(u.vertex_one);
     }
     return result;
 }
@@ -48,19 +48,19 @@ vector<vector<bool>> ToAdjacencyMatrix(const vector<vector<vertex>>& graph) {
 }
 
 
-Edge::Edge(vertex vertexOne, vertex vertexTwo) : vertexOne(vertexOne), vertexTwo(vertexTwo) {}
+Edge::Edge(vertex vertexOne, vertex vertexTwo) : vertex_one(vertexOne), vertex_two(vertexTwo) {}
 
 
 void UsingEdgesGraph::operator^=(const Edge& e) {
-    assert(vertex_correct(e.vertexOne) && vertex_correct(e.vertexTwo));
-    auto it = graph[e.vertexOne].find(e.vertexTwo);
-    if (it != graph[e.vertexOne].end()) {
-        graph[e.vertexOne].erase(it);
-        graph[e.vertexTwo].erase(e.vertexOne);
+    assert(vertex_correct(e.vertex_one) && vertex_correct(e.vertex_two));
+    auto it = graph[e.vertex_one].find(e.vertex_two);
+    if (it != graph[e.vertex_one].end()) {
+        graph[e.vertex_one].erase(it);
+        graph[e.vertex_two].erase(e.vertex_one);
     }
     else {
-        graph[e.vertexOne].insert(e.vertexTwo);
-        graph[e.vertexTwo].insert(e.vertexOne);
+        graph[e.vertex_one].insert(e.vertex_two);
+        graph[e.vertex_two].insert(e.vertex_one);
     }
 }
 

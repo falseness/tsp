@@ -14,7 +14,6 @@ class ApproximateOriginalSolver : public OriginalSolver, public ApproximateSolve
     volatile std::sig_atomic_t A_correct_version_ = A_backup_version_;
 public:
     explicit ApproximateOriginalSolver(size_t K) : OriginalSolver(K) {};
-    vector<vertex> Solve(const vector<vector<vertex>> &graph,
-                                                       const vector<vector<bool>> &adjacency_matrix) override;
+    vector<vertex> Solve(const vector<vector<vertex>> &graph) override;
     vector<vertex> GetBestResult() override;
 };

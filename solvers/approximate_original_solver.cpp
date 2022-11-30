@@ -2,8 +2,7 @@
 
 #include "utils/delete_repeats.h"
 
-vector<vertex> ApproximateOriginalSolver::Solve(const vector<vector<vertex>> &graph,
-                                                const vector<vector<bool>> &adjacency_matrix) {
+vector<vertex> ApproximateOriginalSolver::Solve(const vector<vector<vertex>> &graph) {
     // разрешаем использовать только 1 раз.
     assert(graph_ == nullptr);
 

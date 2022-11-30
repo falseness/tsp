@@ -38,14 +38,13 @@ void signal_handler(int) {
 
 int main() {
     std::signal(SIGTERM, signal_handler);
-    ApproximateOriginalSolver original_solver(2);
+    ApproximateOriginalSolver original_solver(21);
     solver = &original_solver;
 
     auto graph = InputGraph();
-
     adjacency_matrix = ToAdjacencyMatrix(graph);
 
-    original_solver.Solve(graph, adjacency_matrix);
+    original_solver.Solve(graph);
 
     raise(SIGTERM);
     return 0;
