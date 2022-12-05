@@ -85,3 +85,19 @@ vector<vector<vertex>> FromEdgesList(const vector<Edge>& Edges_list);
 vector<vector<bool>> ToAdjacencyMatrix(const vector<vector<vertex>>& graph);
 
 size_t CalculateCycleCost(const std::vector<vertex>& cycle, const std::vector<vector<bool>>& graph);
+
+
+class MaxPathInTreeCalculator {
+    vertex root_;
+    vertex max_depth_ = 0;
+    vertex max_depth_vertex_ = root_parent_;
+    vector<vertex> parent_;
+    const vector<vector<vertex>>& graph_;
+    static const vertex root_parent_ = static_cast<vertex>(-1);
+    void DFS(vertex v, vertex parent, size_t depth);
+public:
+    // граф может быть деревом + изолированные вершины
+    MaxPathInTreeCalculator(vertex max_depth_leaf, const vector<vector<vertex>>& tree_graph) : root_(max_depth_leaf),
+        parent_(tree_graph.size()) , graph_(tree_graph) {}
+    vector<vertex> Calculate();
+};

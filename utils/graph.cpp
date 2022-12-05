@@ -82,3 +82,32 @@ void UsingEdgesGraph::operator^=(const vector<Edge>& edges) {
     return result;
 }
 
+
+void MaxPathInTreeCalculator::DFS(vertex v, vertex parent, size_t depth) {
+    if (depth > max_depth_) {
+        max_depth_ = depth;
+        max_depth_vertex_ =  v;
+    }
+    parent_[v] = parent;
+    for (auto u : graph_[v]) {
+        if (u != parent) {
+            DFS(u, v, depth + 1);
+        }
+    }
+}
+
+vector<vertex> MaxPathInTreeCalculator::Calculate() {
+    // разрешаем использование только 1 раз
+    assert(!max_depth_);
+    DFS(root_, root_parent_, 1);
+    // использование в этой функции push_back может привести к ошибкам при использовании сигналов (почему-то).
+    vector<vertex> max_path(max_depth_);
+
+    vertex current = max_depth_vertex_;
+
+    for (size_t i = 0; current != root_parent_; ++i) {
+        max_path[i] = current;
+        current = parent_[current];
+    }
+    return max_path;
+}

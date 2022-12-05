@@ -7,11 +7,14 @@
 #include "solvers/original_solver.h"
 #include "solvers/random_permutation.h"
 #include "solvers/random_union.h"
+#include "solvers/tree_max_path.h"
 
 
 using testing::AllOf;
 using testing::Ge;
 using testing::Le;
+using std::unique_ptr;
+using std::make_unique;
 
 
 void OriginalSolverTests::SetUp() {}
@@ -28,12 +31,15 @@ void UnitTest1(TSPSolver& solver) {
 }
 
 TEST_F(OriginalSolverTests, UnitTest1) {
-    auto solver = OriginalSolver(5);
-    UnitTest1(solver);
-    auto random_permutation_solver = RandomPermutationSolver();
-    UnitTest1(random_permutation_solver);
-    auto random_union_solver = RandomUnionSolver();
-    UnitTest1(random_union_solver);
+    vector<unique_ptr<TSPSolver>> solvers;
+    solvers.push_back(make_unique<OriginalSolver>(5));
+    solvers.push_back(make_unique<RandomPermutationSolver>());
+    solvers.push_back(make_unique<RandomUnionSolver>());
+    solvers.push_back(make_unique<TreeMaxPath>());
+
+    for (auto& solver : solvers) {
+        UnitTest1(*solver);
+    }
 }
 
 

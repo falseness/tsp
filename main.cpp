@@ -7,8 +7,9 @@
 
 #include "solvers/approximate_original_solver.h"
 #include "solvers/random_permutation.h"
-#include "utils/random.h"
 #include "solvers/random_union.h"
+#include "solvers/tree_max_path.h"
+#include "utils/random.h"
 #include "utils/graph.h"
 #include "utils/input_output.h"
 
@@ -41,7 +42,7 @@ void signal_handler(int) {
 
 int main() {
     std::signal(SIGTERM, signal_handler);
-    RandomUnionSolver this_solver;
+    TreeMaxPath this_solver;
     solver = &this_solver;
 
     auto graph = InputGraph();
