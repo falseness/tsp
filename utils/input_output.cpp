@@ -37,6 +37,7 @@ void OutputGraph(const vector<vector<vertex>>& graph) {
 
 void OutputResult(int cost) {
     std::cout << cost;
+    std::cout.flush();
 }
 
 

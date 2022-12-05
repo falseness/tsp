@@ -14,7 +14,7 @@ set(    GENERAL_SOURCE
         utils/random.cpp
         solvers/original_solver.cpp
         solvers/graph_characteristics_calculator.cpp
-        solvers/approximate_original_solver.cpp utils/input_output.cpp)
+        solvers/approximate_original_solver.cpp utils/input_output.cpp solvers/random_permutation.cpp solvers/random_permutation.h solvers/random_union.cpp solvers/random_union.h)
 
 set(    MAIN_SOURCE
         main.cpp

@@ -3,9 +3,12 @@
 #include <iostream>
 
 #include <memory>
+#include <unistd.h>
 
 #include "solvers/approximate_original_solver.h"
+#include "solvers/random_permutation.h"
 #include "utils/random.h"
+#include "solvers/random_union.h"
 #include "utils/graph.h"
 #include "utils/input_output.h"
 
@@ -18,7 +21,7 @@ void signal_handler(int) {
     if (!solver || adjacency_matrix.empty()) {
         std::cout << "input is too long" << std::endl;
         //std::abort();
-        exit(0);
+        _exit(0);
     }
     auto result = solver->GetBestResult();
     if (result.size() != adjacency_matrix.size()) {
@@ -32,19 +35,19 @@ void signal_handler(int) {
     else {
         OutputResult(CalculateCycleCost(result, adjacency_matrix));
     }
-    exit(0);
+    _exit(0);
 }
 
 
 int main() {
     std::signal(SIGTERM, signal_handler);
-    ApproximateOriginalSolver original_solver(21);
-    solver = &original_solver;
+    RandomUnionSolver this_solver;
+    solver = &this_solver;
 
     auto graph = InputGraph();
     adjacency_matrix = ToAdjacencyMatrix(graph);
 
-    original_solver.Solve(graph);
+    this_solver.Solve(graph);
 
     raise(SIGTERM);
     return 0;
