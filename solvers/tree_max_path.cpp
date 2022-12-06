@@ -3,7 +3,7 @@
 #include "utils/random.h"
 
 
-vector<vertex> TreeMaxPath::FindRandomResult(const vector<vector<vertex>> &original_graph) {
+vector<vertex> TreeMaxPathSolver::FindRandomResult(const vector<vector<vertex>> &original_graph) {
     paths_.clear();
     vertex_in_path_.next_epoch();
     auto graph = original_graph;
@@ -29,8 +29,8 @@ vector<vertex> TreeMaxPath::FindRandomResult(const vector<vector<vertex>> &origi
     return CalculateResult(paths_);
 }
 
-void TreeMaxPath::CreateDFSTree(vertex v, size_t depth, size_t& max_depth, vertex& max_depth_leaf,
-                                vector<vector<vertex>> &graph, vector<vector<vertex>>& tree_graph) {
+void TreeMaxPathSolver::CreateDFSTree(vertex v, size_t depth, size_t& max_depth, vertex& max_depth_leaf,
+                                      vector<vector<vertex>> &graph, vector<vector<vertex>>& tree_graph) {
     if (depth > max_depth) {
         max_depth = depth;
         max_depth_leaf = v;
@@ -54,7 +54,7 @@ void TreeMaxPath::CreateDFSTree(vertex v, size_t depth, size_t& max_depth, verte
     }
 }
 
-vector<vertex> TreeMaxPath::Solve(const vector<vector<vertex>> &graph) {
+vector<vertex> TreeMaxPathSolver::Solve(const vector<vector<vertex>> &graph) {
     dfs_used_ = VertexUsed(graph.size());
     vertex_in_path_ = VertexUsed(graph.size());
     return PathSolver::Solve(graph);

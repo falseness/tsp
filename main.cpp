@@ -21,13 +21,13 @@ std::vector<vector<bool>> adjacency_matrix;
 void signal_handler(int) {
     if (!solver || adjacency_matrix.empty()) {
         std::cout << "input is too long" << std::endl;
-        //std::abort();
-        _exit(0);
+        _exit(1);
     }
     auto result = solver->GetBestResult();
     if (result.size() != adjacency_matrix.size()) {
         if (result.size() > adjacency_matrix.size()) {
             std::cout << "something went wrong"<< std::endl;
+            _exit(1);
         }
         //assert(result.size() < adjacency_matrix.size());
         // solver не успел ничего посчитать
@@ -42,7 +42,7 @@ void signal_handler(int) {
 
 int main() {
     std::signal(SIGTERM, signal_handler);
-    TreeMaxPath this_solver;
+    TreeMaxPathSolver this_solver;
     solver = &this_solver;
 
     auto graph = InputGraph();

@@ -35,7 +35,7 @@ TEST_F(OriginalSolverTests, UnitTest1) {
     solvers.push_back(make_unique<OriginalSolver>(5));
     solvers.push_back(make_unique<RandomPermutationSolver>());
     solvers.push_back(make_unique<RandomUnionSolver>());
-    solvers.push_back(make_unique<TreeMaxPath>());
+    solvers.push_back(make_unique<TreeMaxPathSolver>());
 
     for (auto& solver : solvers) {
         UnitTest1(*solver);

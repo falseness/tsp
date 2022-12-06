@@ -5,7 +5,7 @@
 #include "solvers/path_solver.h"
 
 
-class TreeMaxPath : public PathSolver<std::vector>  {
+class TreeMaxPathSolver : public PathSolver<std::vector>  {
     VertexUsed dfs_used_ = VertexUsed(0);
     VertexUsed vertex_in_path_ = VertexUsed(0);
     void CreateDFSTree(vertex v, size_t depth, size_t& max_depth, vertex& max_depth_leaf,

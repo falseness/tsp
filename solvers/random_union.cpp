@@ -31,12 +31,11 @@ void RandomUnionSolver::UnionPaths(vector<list<vertex>*> &get_list_by_boundary_e
 vector<vertex> RandomUnionSolver::FindRandomResult(const vector<vector<vertex>> &graph) {
     auto permutation = GenerateRandomPermutation(graph.size());
 
-    vector<list<vertex>*> get_list_by_boundary_element;
-    get_list_by_boundary_element.reserve(graph.size());
+    vector<list<vertex>*> get_list_by_boundary_element(graph.size());
 
     for (vertex i = 0; i < graph.size(); ++i) {
         paths_[i] = list({i});
-        get_list_by_boundary_element.push_back(&paths_[i]);
+        get_list_by_boundary_element[i] = &paths_[i];
     }
 
     for (auto v : permutation) {
