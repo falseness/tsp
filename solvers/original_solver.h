@@ -30,7 +30,7 @@ protected:
     vector<vertex> CalculateCycle(const UsingEdgesGraph& A);
     void Initialize(const vector<vector<vertex>>& graph);
 public:
-    explicit OriginalSolver(size_t k) : K_(k) {};
+    explicit OriginalSolver(size_t k = 21) : K_(k) {};
 
     vector<vertex> Solve(const vector<vector<vertex>>& graph) override;
 };
