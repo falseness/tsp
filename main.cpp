@@ -29,7 +29,6 @@ void signal_handler(int) {
             std::cout << "something went wrong"<< std::endl;
             _exit(1);
         }
-        //assert(result.size() < adjacency_matrix.size());
         // solver не успел ничего посчитать
         OutputResult(adjacency_matrix.size() * 2);
     }
